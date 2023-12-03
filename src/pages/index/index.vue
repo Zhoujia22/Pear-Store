@@ -22,10 +22,10 @@ const title =
 const bannerList = ref<BannerItem[]>([])
 const categoryList = ref<CategoryItem[]>([])
 const hotList = ref<HotItem[]>([])
-
 //bind容器
 const guessRef = ref<InstanceType<typeof Guess>>()
-
+//动画开关
+const isTriggered = ref(false)
 //获取数据
 const getHomeBannerData = async () => {
   const response = await getHomeBannerAPI()
@@ -49,15 +49,36 @@ onLoad(() => {
   getHomeHotData()
 })
 
-//加载更多guess数据
+//下滑
 const scrollByBottom = () => {
   guessRef.value?.getMore()
+}
+//上拉
+const scrollByTop = async () => {
+  // 开始动画
+  isTriggered.value = true
+  guessRef.value?.refresh()
+  await Promise.all([
+    getHomeBannerData(),
+    getHomeCategoryData(),
+    getHomeHotData(),
+    guessRef.value?.getMore(),
+  ])
+  // 关闭动画
+  isTriggered.value = false
 }
 </script>
 
 <template>
   <CustomNavbar />
-  <scroll-view scroll-y class="scroll-view" @scrolltolower="scrollByBottom">
+  <scroll-view
+    refresher-enabled
+    @refresherrefresh="scrollByTop"
+    :refresher-triggered="isTriggered"
+    @scrolltolower="scrollByBottom"
+    class="scroll-view"
+    scroll-y
+  >
     <NoticeBar :title="title" :speed="50" />
     <CustomSwiper :list="bannerList" />
     <CategoryPanel :list="categoryList" />

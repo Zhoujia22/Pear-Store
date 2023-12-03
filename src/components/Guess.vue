@@ -8,7 +8,7 @@ export type PageParams = {
   pageSize: number
 }
 
-const guesslist = ref<GuessItem[]>([])
+const guessList = ref<GuessItem[]>([])
 const pageParams: Required<PageParams> = {
   page: 1,
   pageSize: 10,
@@ -20,7 +20,7 @@ const getHomeGoodsGuessData = async () => {
     return uni.showToast({ icon: 'none', title: '没有更多数据~' })
   }
   const response = await getHomeGoodsGuessAPI(pageParams)
-  guesslist.value.push(...response.result.items)
+  guessList.value.push(...response.result.items)
   pageParams.page = response.result.page + 1
   guessEnd.value = pageParams.page > response.result.pages ? true : false
 }
@@ -29,7 +29,13 @@ onMounted(() => {
   getHomeGoodsGuessData()
 })
 
-defineExpose({ getMore: getHomeGoodsGuessData })
+const refresh = () => {
+  pageParams.page = 1
+  guessList.value = []
+  guessEnd.value = false
+}
+
+defineExpose({ getMore: getHomeGoodsGuessData, refresh })
 </script>
 <template>
   <view class="wrapper">
@@ -43,7 +49,7 @@ defineExpose({ getMore: getHomeGoodsGuessData })
         :url="`/pages/goods/goods`"
         open-type="navigate"
         hover-class="navigator-hover"
-        v-for="item in guesslist"
+        v-for="item in guessList"
         :key="item.id"
       >
         <image class="image" :src="item.picture" mode="aspectFill" />
