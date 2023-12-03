@@ -1,3 +1,4 @@
+import type { PageParams } from '@/components/Guess.vue'
 import type { PageResult } from '@/types/global'
 import { http } from '@/utils/http'
 /**
@@ -62,9 +63,10 @@ export const getHomeHotAPI = () => {
   })
 }
 
-export const getHomeGoodsGuessAPI = () => {
+export const getHomeGoodsGuessAPI = (data?: PageParams) => {
   return http<PageResult<GuessItem>>({
     method: 'GET',
     url: '/home/goods/guessLike',
+    data,
   })
 }

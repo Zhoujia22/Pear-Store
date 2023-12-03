@@ -14,7 +14,7 @@ import {
   getHomeHotAPI,
 } from '@/services/home'
 import { onLoad } from '@dcloudio/uni-app'
-import { ref } from 'vue'
+import { ref, type ComponentPublicInstance } from 'vue'
 
 const title =
   '🎄圣诞狂欢，大放送！🎁 抢购即享折上95折，满300元再减30元！限时3天，快来享受节日特惠！🛍️✨'
@@ -22,6 +22,10 @@ const title =
 const bannerList = ref<BannerItem[]>([])
 const categoryList = ref<CategoryItem[]>([])
 const hotList = ref<HotItem[]>([])
+
+//bind容器
+const guessRef = ref<InstanceType<typeof Guess>>()
+
 //获取数据
 const getHomeBannerData = async () => {
   const response = await getHomeBannerAPI()
@@ -44,16 +48,21 @@ onLoad(() => {
   getHomeCategoryData()
   getHomeHotData()
 })
+
+//加载更多guess数据
+const scrollByBottom = () => {
+  guessRef.value?.getMore()
+}
 </script>
 
 <template>
   <CustomNavbar />
-  <scroll-view scroll-y class="scroll-view">
+  <scroll-view scroll-y class="scroll-view" @scrolltolower="scrollByBottom">
     <NoticeBar :title="title" :speed="50" />
     <CustomSwiper :list="bannerList" />
     <CategoryPanel :list="categoryList" />
     <HotPanel :list="hotList" />
-    <Guess />
+    <Guess ref="guessRef" />
   </scroll-view>
 </template>
 

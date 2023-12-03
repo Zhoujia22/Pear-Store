@@ -3,15 +3,33 @@ import { getHomeGoodsGuessAPI, type GuessItem } from '@/services/home'
 import { ref } from 'vue'
 import { onMounted } from 'vue'
 
+export type PageParams = {
+  page: number
+  pageSize: number
+}
+
 const guesslist = ref<GuessItem[]>([])
+const pageParams: Required<PageParams> = {
+  page: 1,
+  pageSize: 10,
+}
+const guessEnd = ref(false)
 
 const getHomeGoodsGuessData = async () => {
-  const response = await getHomeGoodsGuessAPI()
+  if (guessEnd.value) {
+    return uni.showToast({ icon: 'none', title: '没有更多数据~' })
+  }
+  const response = await getHomeGoodsGuessAPI(pageParams)
   guesslist.value.push(...response.result.items)
+  pageParams.page = response.result.page + 1
+  guessEnd.value = pageParams.page > response.result.pages ? true : false
 }
+
 onMounted(() => {
   getHomeGoodsGuessData()
 })
+
+defineExpose({ getMore: getHomeGoodsGuessData })
 </script>
 <template>
   <view class="wrapper">
@@ -36,7 +54,7 @@ onMounted(() => {
         </view>
       </navigator>
     </view>
-    <view class="loading"> 正在加载... </view>
+    <view class="loading"> {{ guessEnd ? '已经到底啦！' : '正在加载中...' }} </view>
   </view>
 </template>
 

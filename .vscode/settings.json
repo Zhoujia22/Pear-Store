@@ -11,6 +11,10 @@
     "manifest.json": "jsonc" // manifest.json 可以写注释
   },
   "cSpell.words": [
-    "dcloudio"
+    "dcloudio",
+    "guesslist",
+    "miniapp",
+    "mutli",
+    "scrolltolower"
   ]
 }
