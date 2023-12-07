@@ -13,7 +13,7 @@ const props = defineProps<{ list: HotItem[] }>()
       </view>
       <navigator
         class="cards"
-        url="/pages/recommend/recommend"
+        :url="`/pages/hot/hot?type=${item.type}`"
         open-type="navigate"
         hover-class="navigator-hover"
       >

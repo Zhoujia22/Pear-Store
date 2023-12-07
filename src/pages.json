@@ -40,9 +40,9 @@
       }
     },
     {
-      "path": "composables/CustomNavbar",
+      "path": "pages/hot/hot",
       "style": {
-        "navigationBarTitleText": "CustomNavbar"
+        "navigationBarTitleText": "热卖好物"
       }
     }
   ],
