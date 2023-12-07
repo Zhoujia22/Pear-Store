@@ -15,6 +15,8 @@ import {
 } from '@/services/home'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref, type ComponentPublicInstance } from 'vue'
+import PageSkeleton from '@/components/PageSkeleton.vue'
+import type { Fragment } from 'vue'
 
 const title =
   '🎄圣诞狂欢，大放送！🎁 抢购即享折上95折，满300元再减30元！限时3天，快来享受节日特惠！🛍️✨'
@@ -26,6 +28,8 @@ const hotList = ref<HotItem[]>([])
 const guessRef = ref<InstanceType<typeof Guess>>()
 //动画开关
 const isTriggered = ref(false)
+//骨架屏开关
+const isLoading = ref(false)
 //获取数据
 const getHomeBannerData = async () => {
   const response = await getHomeBannerAPI()
@@ -43,10 +47,10 @@ const getHomeHotData = async () => {
 }
 
 //页面加载调用API
-onLoad(() => {
-  getHomeBannerData()
-  getHomeCategoryData()
-  getHomeHotData()
+onLoad(async () => {
+  isLoading.value = true
+  await Promise.all([getHomeBannerData(), getHomeCategoryData(), getHomeHotData()])
+  isLoading.value = false
 })
 
 //下滑
@@ -79,11 +83,14 @@ const scrollByTop = async () => {
     class="scroll-view"
     scroll-y
   >
-    <NoticeBar :title="title" :speed="50" />
-    <CustomSwiper :list="bannerList" />
-    <CategoryPanel :list="categoryList" />
-    <HotPanel :list="hotList" />
-    <Guess ref="guessRef" />
+    <PageSkeleton v-if="isLoading" />
+    <Fragment v-else>
+      <NoticeBar :title="title" :speed="50" />
+      <CustomSwiper :list="bannerList" />
+      <CategoryPanel :list="categoryList" />
+      <HotPanel :list="hotList" />
+      <Guess ref="guessRef" />
+    </Fragment>
   </scroll-view>
 </template>
 
