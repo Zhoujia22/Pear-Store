@@ -6,9 +6,9 @@ const { safeAreaInsets } = uni.getSystemInfoSync()
   <view class="wrapper" :style="{ paddingTop: safeAreaInsets?.top + 'px' }">
     <view class="logo">
       <image class="logo-image" src="../static/images/logo.png"></image>
-      <text>安全</text>
-      <text>方便</text>
-      <text>快捷</text>
+      <text class="text">安全</text>
+      <text class="text">方便</text>
+      <text class="text">快捷</text>
     </view>
   </view>
 </template>
@@ -24,7 +24,7 @@ const { safeAreaInsets } = uni.getSystemInfoSync()
     align-items: center;
     padding-left: 20rpx;
     padding-top: 20rpx;
-    > text {
+    > .text {
       font-size: 20rpx;
       font-weight: bold;
       margin-left: 10rpx;
