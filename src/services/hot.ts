@@ -1,42 +1,27 @@
+import type { GoodsItem, PageResult } from '@/types/global'
 import { http } from '@/utils/http'
 
-type HotParams = {
+export type HotParams = {
   pageSize: number
   page: number
   subType: string
 }
 
-type item = {
-  desc: string
-  id: string
-  name: string
-  picture: string
-  price: number
-}
-
-type goodItem = {
-  items: item[]
-  counts: string
-  pages: string
-  page: string
-  pageSize: string
-}
-
-type subTypes = {
+export type SubTypeItem = {
   id: string
   title: string
-  goodsItems: goodItem[]
+  goodsItems: PageResult<GoodsItem>
 }
 
 export type HotResult = {
-  title: string
   id: string
   bannerPicture: string
-  subTypes: subTypes[]
+  title: string
+  subTypes: SubTypeItem[]
 }
 
 export const getHotRecommendAPI = (url: string, data?: HotParams) => {
-  return http({
+  return http<HotResult>({
     method: 'GET',
     url,
     data,

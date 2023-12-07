@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { getHotRecommendAPI } from '@/services/hot'
+import { getHotRecommendAPI, type SubTypeItem } from '@/services/hot'
 import { onLoad } from '@dcloudio/uni-app'
+import { ref } from 'vue'
 
 const urlMap = [
   { type: '1', title: '特惠推荐', url: '/hot/preference' },
@@ -11,13 +12,22 @@ const urlMap = [
 const props = defineProps<{
   type: string
 }>()
+const bannerPicture = ref()
+const subTypes = ref<SubTypeItem[]>([])
+const activeIndex = ref(0)
+
 const currentTitle = urlMap.find((item) => item.type === props.type)
 
 uni.setNavigationBarTitle({ title: currentTitle?.title || '热门好物' })
 
 const getHotRecommendData = async () => {
   const response = await getHotRecommendAPI(currentTitle!.url)
+  bannerPicture.value = response.result.bannerPicture
+  subTypes.value = response.result.subTypes
+
+  console.log(response)
 }
+
 onLoad(() => {
   getHotRecommendData()
 })
@@ -25,32 +35,40 @@ onLoad(() => {
 <template>
   <view class="wrapper">
     <view class="title-bg">
-      <image
-        src="http://yjy-xiaotuxian-dev.oss-cn-beijing.aliyuncs.com/picture/2021-05-20/84abb5b1-8344-49ae-afc1-9cb932f3d593.jpg"
-      ></image>
+      <image :src="bannerPicture"></image>
     </view>
     <view class="tabs">
-      <text class="text active">抢鲜体验</text>
-      <text class="text">新品预告</text>
+      <text
+        class="text"
+        v-for="(item, index) in subTypes"
+        :key="item.id"
+        :class="{ active: activeIndex === index }"
+        @tap="activeIndex = index"
+      >
+        {{ item.title }}
+      </text>
     </view>
-    <scroll-view scroll-y class="scroll-view">
+    <scroll-view
+      scroll-y
+      class="scroll-view"
+      v-for="(item, index) in subTypes"
+      :key="item.id"
+      v-show="activeIndex === index"
+    >
       <view class="goods">
         <navigator
-          url="/pages/"
+          :url="`/pages/goods/goods?id=${goods.id}`"
           open-type="navigate"
           hover-class="navigator-hover"
           class="navigator"
-          v-for="item in 50"
-          :key="item"
+          v-for="goods in item.goodsItems.items"
+          :key="goods.id"
         >
-          <image
-            class="thumb"
-            src="https://yanxuan-item.nosdn.127.net/5e7864647286c7447eeee7f0025f8c11.png"
-          ></image>
-          <view class="ellipsis">不含酒精，使用安心爽肤清洁湿巾</view>
+          <image class="thumb" :src="goods.picture"></image>
+          <view class="ellipsis">{{ goods.name }}</view>
           <view class="price">
             <text class="symbol">¥</text>
-            <text class="number">29.90</text>
+            <text class="number">{{ goods.price }}</text>
           </view></navigator
         >
       </view>

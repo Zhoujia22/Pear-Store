@@ -1,5 +1,5 @@
 import type { PageParams } from '@/components/Guess.vue'
-import type { PageResult } from '@/types/global'
+import type { GoodsItem, PageResult } from '@/types/global'
 import { http } from '@/utils/http'
 /**
  * 首页-广告区域
@@ -27,16 +27,6 @@ export type HotItem = {
   target: string
   title: string
   type: string
-}
-
-export type GuessItem = {
-  desc: string
-  discount: number
-  id: string
-  name: string
-  orderNum: number
-  picture: string
-  price: number
 }
 
 export const getHomeBannerAPI = (distributionSite = 1) => {
@@ -70,3 +60,4 @@ export const getHomeGoodsGuessAPI = (data?: PageParams) => {
     data,
   })
 }
+export type GuessItem = GoodsItem
