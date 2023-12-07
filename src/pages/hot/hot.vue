@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+import { getHotRecommendAPI } from '@/services/hot'
+import { onLoad } from '@dcloudio/uni-app'
+
 const urlMap = [
   { type: '1', title: '特惠推荐', url: '/hot/preference' },
   { type: '2', title: '爆款推荐', url: '/hot/inVogue' },
@@ -9,7 +12,15 @@ const props = defineProps<{
   type: string
 }>()
 const currentTitle = urlMap.find((item) => item.type === props.type)
+
 uni.setNavigationBarTitle({ title: currentTitle?.title || '热门好物' })
+
+const getHotRecommendData = async () => {
+  const response = await getHotRecommendAPI(currentTitle!.url)
+}
+onLoad(() => {
+  getHotRecommendData()
+})
 </script>
 <template>
   <view class="wrapper">
