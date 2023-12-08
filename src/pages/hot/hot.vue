@@ -24,10 +24,20 @@ const getHotRecommendData = async () => {
   const response = await getHotRecommendAPI(currentTitle!.url)
   bannerPicture.value = response.result.bannerPicture
   subTypes.value = response.result.subTypes
-
-  console.log(response)
 }
 
+const onScrollToLower = async () => {
+  const currentSubTypes = subTypes.value[activeIndex.value]
+  currentSubTypes.goodsItems.page += 1
+  const response = await getHotRecommendAPI(currentTitle!.url, {
+    subType: currentSubTypes.id,
+    page: currentSubTypes.goodsItems.page,
+    pageSize: currentSubTypes.goodsItems.pageSize,
+  })
+  const newSubTypes = response.result.subTypes[activeIndex.value]
+  currentSubTypes.goodsItems.items.push(...newSubTypes.goodsItems.items)
+  console.log(newSubTypes)
+}
 onLoad(() => {
   getHotRecommendData()
 })
@@ -54,6 +64,7 @@ onLoad(() => {
       v-for="(item, index) in subTypes"
       :key="item.id"
       v-show="activeIndex === index"
+      @scrolltolower="onScrollToLower"
     >
       <view class="goods">
         <navigator
