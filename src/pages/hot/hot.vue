@@ -15,6 +15,7 @@ const props = defineProps<{
 const bannerPicture = ref()
 const subTypes = ref<SubTypeItem[]>([])
 const activeIndex = ref(0)
+const finish = ref(false)
 
 const currentTitle = urlMap.find((item) => item.type === props.type)
 
@@ -28,7 +29,12 @@ const getHotRecommendData = async () => {
 
 const onScrollToLower = async () => {
   const currentSubTypes = subTypes.value[activeIndex.value]
-  currentSubTypes.goodsItems.page += 1
+  if (currentSubTypes.goodsItems.page < currentSubTypes.goodsItems.pages) {
+    currentSubTypes.goodsItems.page += 1
+  } else {
+    finish.value = true
+    return uni.showToast({ icon: 'none', title: '没有更多啦' })
+  }
   const response = await getHotRecommendAPI(currentTitle!.url, {
     subType: currentSubTypes.id,
     page: currentSubTypes.goodsItems.page,
@@ -83,7 +89,7 @@ onLoad(() => {
           </view></navigator
         >
       </view>
-      <view class="loading">正在加载... </view>
+      <view class="loading">{{ finish ? '没有更多啦' : '正在加载...' }} </view>
     </scroll-view>
   </view>
 </template>
