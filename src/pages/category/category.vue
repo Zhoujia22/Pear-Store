@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import CustomSwiper from '@/components/CustomSwiper.vue'
 import { getHomeBannerAPI, type BannerItem } from '@/services/home'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { getCategoryTopAPI, type CategoryTopItem } from '@/services/category'
 
@@ -16,6 +16,8 @@ const getCategoryTopData = async () => {
   const response = await getCategoryTopAPI()
   categoryList.value = response.result
 }
+const subCategoryList = computed(() => categoryList.value[activeIndex.value]?.children || [])
+
 onLoad(() => {
   getBannerData()
   getCategoryTopData()
@@ -38,21 +40,24 @@ onLoad(() => {
     </view>
     <view class="content">
       <custom-swiper class="banner" :list="bannerList" />
-      <view class="panel" v-for="item in 3" :key="item">
+      <view class="panel" v-for="item in subCategoryList" :key="item.id">
         <view class="title">
-          <text class="name">宠物用品</text>
+          <text class="name">{{ item.name }}</text>
         </view>
         <view class="section">
-          <navigator url="/pages/" class="goods" open-type="navigate" hover-class="navigator-hover">
-            <image
-              src="https://yanxuan-item.nosdn.127.net/674ec7a88de58a026304983dd049ea69.jpg"
-              mode="scaleToFill"
-              class="image"
-            />
-            <view class="name">木天蓼逗猫棍</view>
+          <navigator
+            :url="`/pages/goods/goods?id=${good.id}`"
+            class="goods"
+            open-type="navigate"
+            hover-class="navigator-hover"
+            v-for="good in item.goods"
+            :key="good.id"
+          >
+            <image :src="good.picture" mode="scaleToFill" class="image" />
+            <view class="name">{{ good.name }}</view>
             <view class="price">
               <text class="symbol">¥</text>
-              <text class="number">16.00</text>
+              <text class="number">{{ good.price }}</text>
             </view>
           </navigator>
         </view>
