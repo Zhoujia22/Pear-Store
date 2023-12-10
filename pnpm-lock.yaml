@@ -88,6 +88,9 @@ devDependencies:
   '@types/node':
     specifier: ^18.11.9
     version: 18.11.10
+  '@types/uni-app':
+    specifier: ^1.4.8
+    version: 1.4.8
   '@types/wechat-miniprogram':
     specifier: ^3.4.7
     version: 3.4.7
@@ -3350,6 +3353,12 @@ packages:
     resolution: {integrity: sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==, tarball: https://registry.npmmirror.com/@types/stack-utils/-/stack-utils-2.0.1.tgz}
     dev: true
 
+  /@types/uni-app@1.4.8:
+    resolution: {integrity: sha512-plxwi9MvGDrekCsDKuNlCN3ZXIv9zkqHsKZJOsc8FQqLSHveDBOm11qOaswe4QyNWVHpvwZMViii/Ni1/d40LA==, tarball: https://registry.npmmirror.com/@types/uni-app/-/uni-app-1.4.8.tgz}
+    dependencies:
+      vue: 2.7.15
+    dev: true
+
   /@types/wechat-miniprogram@3.4.7:
     resolution: {integrity: sha512-X6SVOOaTPQN24lYBSV5jLuWyIedx8DGJnT0VUBnoNzJruhxotCL28ecGb7AO5JfXOXtHqSS5+CnJ70NxFxmisA==, tarball: https://registry.npmmirror.com/@types/wechat-miniprogram/-/wechat-miniprogram-3.4.7.tgz}
     dev: true
@@ -3632,6 +3641,14 @@ packages:
     dependencies:
       '@vue/compiler-core': 3.3.4
       '@vue/shared': 3.3.4
+
+  /@vue/compiler-sfc@2.7.15:
+    resolution: {integrity: sha512-FCvIEevPmgCgqFBH7wD+3B97y7u7oj/Wr69zADBf403Tui377bThTjBvekaZvlRr4IwUAu3M6hYZeULZFJbdYg==, tarball: https://registry.npmmirror.com/@vue/compiler-sfc/-/compiler-sfc-2.7.15.tgz}
+    dependencies:
+      '@babel/parser': 7.23.5
+      postcss: 8.4.28
+      source-map: 0.6.1
+    dev: true
 
   /@vue/compiler-sfc@3.2.47:
     resolution: {integrity: sha512-rog05W+2IFfxjMcFw10tM9+f7i/+FFpZJJ5XHX72NP9eC2uRD+42M3pYcQqDXVYoj74kHMSEdQ/WmCjt8JFksQ==, tarball: https://registry.npmmirror.com/@vue/compiler-sfc/-/compiler-sfc-3.2.47.tgz}
@@ -4612,7 +4629,7 @@ packages:
     dev: true
 
   /csstype@3.1.2:
-    resolution: {integrity: sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==}
+    resolution: {integrity: sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==, tarball: https://registry.npmmirror.com/csstype/-/csstype-3.1.2.tgz}
 
   /data-urls@2.0.0:
     resolution: {integrity: sha512-X5eWTSXO/BJmpdIKCRuKUgSCgAN0OwliVK3yPKbwIWU1Tdw5BRajxlzMidvh+gwko9AfQ9zIj52pzF91Q3YAvQ==, tarball: https://registry.npmmirror.com/data-urls/-/data-urls-2.0.0.tgz}
@@ -7565,7 +7582,7 @@ packages:
     dev: true
 
   /source-map-js@1.0.2:
-    resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
+    resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==, tarball: https://registry.npmmirror.com/source-map-js/-/source-map-js-1.0.2.tgz}
     engines: {node: '>=0.10.0'}
 
   /source-map-support@0.5.21:
@@ -8147,6 +8164,13 @@ packages:
       '@vue/typescript': 1.8.8(typescript@5.1.6)
       semver: 7.3.8
       typescript: 5.1.6
+    dev: true
+
+  /vue@2.7.15:
+    resolution: {integrity: sha512-a29fsXd2G0KMRqIFTpRgpSbWaNBK3lpCTOLuGLEDnlHWdjB8fwl6zyYZ8xCrqkJdatwZb4mGHiEfJjnw0Q6AwQ==, tarball: https://registry.npmmirror.com/vue/-/vue-2.7.15.tgz}
+    dependencies:
+      '@vue/compiler-sfc': 2.7.15
+      csstype: 3.1.2
     dev: true
 
   /vue@3.3.4:

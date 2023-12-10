@@ -76,8 +76,9 @@ onLoad(() => {
       background-color: #f6f6f6;
       .item {
         height: 96rpx;
-        text-align: center;
-        line-height: 96rpx;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         font-size: 26rpx;
         color: #595c63;
         position: relative;
