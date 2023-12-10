@@ -46,7 +46,7 @@ defineExpose({ getMore: getHomeGoodsGuessData, refresh })
     <view class="guess">
       <navigator
         class="guess-item"
-        :url="`/pages/goods/goods`"
+        :url="`/pages/goods/goods?id=${item.id}`"
         open-type="navigate"
         hover-class="navigator-hover"
         v-for="item in guessList"

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { HotItem } from '@/services/home'
 
-const props = defineProps<{ list: HotItem[] }>()
+const { list } = defineProps<{ list: HotItem[] }>()
 </script>
 
 <template>
