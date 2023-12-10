@@ -3,14 +3,22 @@ import CustomSwiper from '@/components/CustomSwiper.vue'
 import { getHomeBannerAPI, type BannerItem } from '@/services/home'
 import { ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
+import { getCategoryTopAPI, type CategoryTopItem } from '@/services/category'
 
 const bannerList = ref<BannerItem[]>([])
 const getBannerData = async () => {
   const response = await getHomeBannerAPI(2)
   bannerList.value = response.result
 }
+const categoryList = ref<CategoryTopItem[]>([])
+const activeIndex = ref(0)
+const getCategoryTopData = async () => {
+  const response = await getCategoryTopAPI()
+  categoryList.value = response.result
+}
 onLoad(() => {
   getBannerData()
+  getCategoryTopData()
 })
 </script>
 
@@ -18,7 +26,14 @@ onLoad(() => {
   <view class="wrapper">
     <view class="form">
       <scroll-view scroll-y class="scroll-view">
-        <view v-for="item in 10" :key="item" class="item">居家 </view>
+        <view
+          v-for="(item, index) in categoryList"
+          :key="item.id"
+          class="item"
+          :class="{ active: activeIndex === index }"
+          @tap="activeIndex = index"
+          >{{ item.name }}
+        </view>
       </scroll-view>
     </view>
     <view class="content">
