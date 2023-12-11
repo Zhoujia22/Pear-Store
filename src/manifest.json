@@ -1,5 +1,5 @@
 {
-  "name": "小太阳",
+  "name": "PearStore",
   "appid": "",
   "description": "",
   "versionName": "1.0.0",
@@ -52,7 +52,7 @@
   "mp-weixin": {
     "appid": "wxaa3f95f3d200feba",
     "setting": {
-      "urlCheck": false
+      "urlCheck": true
     },
     "usingComponents": true
   },

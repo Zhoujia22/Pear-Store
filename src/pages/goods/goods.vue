@@ -3,6 +3,8 @@ import { getGoodsByIdAPI, type GoodsResult } from '@/services/goods'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 
+type popopFollow = 'top' | 'center' | 'bottom' | 'left' | 'right' | 'message' | 'dialog' | 'share'
+
 const { safeAreaInsets } = uni.getSystemInfoSync()
 
 const query = defineProps<{
@@ -13,6 +15,20 @@ const getGoodsByData = async () => {
   const response = await getGoodsByIdAPI(query.id)
   goods.value = response.result
 }
+const currentIndex = ref(0)
+const onChange: UniHelper.SwiperOnChange = (e) => {
+  currentIndex.value = e.detail.current
+}
+const onTapImage = (current: string, urls: string[]) => {
+  uni.previewImage({
+    urls,
+    current,
+  })
+}
+const popup = ref<{
+  open: (type: popopFollow) => void
+  close: () => void
+}>()
 
 onLoad(() => {
   getGoodsByData()
@@ -24,15 +40,15 @@ onLoad(() => {
     <scroll-view scroll-y class="viewport">
       <view class="goods">
         <view class="preview">
-          <swiper circular>
+          <swiper circular @change="onChange">
             <swiper-item v-for="item in goods?.mainPictures" :key="item">
-              <image mode="aspectFill" :src="item" />
+              <image mode="aspectFill" :src="item" @tap="onTapImage(item, goods!.mainPictures)" />
             </swiper-item>
           </swiper>
           <view class="indicator">
-            <text class="current">1</text>
+            <text class="current">{{ currentIndex + 1 }}</text>
             <text class="split">/</text>
-            <text class="total">5</text>
+            <text class="total">{{ goods?.mainPictures.length }}</text>
           </view>
         </view>
         <view class="meta">
@@ -44,7 +60,7 @@ onLoad(() => {
           <view class="desc"> {{ goods?.desc }}</view>
         </view>
 
-        <view class="operation">
+        <view class="action">
           <view class="item arrow">
             <text class="label">选择</text>
             <text class="text ellipsis"> 囤货4条装（樱花粉+薄荷绿+麻米+雾蓝色） </text>
@@ -53,7 +69,7 @@ onLoad(() => {
             <text class="label">送至</text>
             <text class="text ellipsis">北京市顺义区京顺路9号黑马程序员</text>
           </view>
-          <view class="item arrow">
+          <view class="item arrow" @tap="popup?.open('bottom')">
             <text class="label">服务</text>
             <text class="text ellipsis">无忧退 快速退款 免费包邮</text>
           </view>
@@ -109,6 +125,10 @@ onLoad(() => {
         <view class="payment"> 立即购买 </view>
       </view>
     </view>
+    <uni-popup ref="popup" background-color="#fff">
+      1
+      <button hover-class="button-hover" @tap="popup?.close()">点击关闭</button>
+    </uni-popup>
   </view>
 </template>
 
@@ -173,7 +193,7 @@ onLoad(() => {
           color: #cf4444;
         }
       }
-      .operation {
+      .action {
         padding-left: 20rpx;
         .item {
           height: 90rpx;
