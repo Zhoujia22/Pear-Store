@@ -2,6 +2,8 @@
 import { getGoodsByIdAPI, type GoodsResult } from '@/services/goods'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
+import AddressPanel from '@/pages/goods/components/AddressPanel.vue'
+import ServicePanel from './components/ServicePanel.vue'
 
 type popopFollow = 'top' | 'center' | 'bottom' | 'left' | 'right' | 'message' | 'dialog' | 'share'
 
@@ -29,7 +31,11 @@ const popup = ref<{
   open: (type: popopFollow) => void
   close: () => void
 }>()
-
+const popupName = ref<'address' | 'service'>()
+const openPopup = (name: typeof popupName.value) => {
+  popupName.value = name
+  popup.value?.open('bottom')
+}
 onLoad(() => {
   getGoodsByData()
 })
@@ -65,11 +71,11 @@ onLoad(() => {
             <text class="label">选择</text>
             <text class="text ellipsis"> 囤货4条装（樱花粉+薄荷绿+麻米+雾蓝色） </text>
           </view>
-          <view class="item arrow">
+          <view class="item arrow" @tap="openPopup('address')">
             <text class="label">送至</text>
             <text class="text ellipsis">北京市顺义区京顺路9号黑马程序员</text>
           </view>
-          <view class="item arrow" @tap="popup?.open('bottom')">
+          <view class="item arrow" @tap="openPopup('service')">
             <text class="label">服务</text>
             <text class="text ellipsis">无忧退 快速退款 免费包邮</text>
           </view>
@@ -126,7 +132,8 @@ onLoad(() => {
       </view>
     </view>
     <uni-popup ref="popup" background-color="#fff">
-      1
+      <AddressPanel v-if="popupName === 'address'" @close="popup?.close()" />
+      <ServicePanel v-if="popupName === 'service'" @close="popup?.close()" />
       <button hover-class="button-hover" @tap="popup?.close()">点击关闭</button>
     </uni-popup>
   </view>
