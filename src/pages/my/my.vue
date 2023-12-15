@@ -8,7 +8,6 @@ const getData = async () => {
     method: 'GET',
     url: '/member/profile',
   })
-  console.log(response)
 }
 </script>
 

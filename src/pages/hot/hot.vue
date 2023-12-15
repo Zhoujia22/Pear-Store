@@ -42,7 +42,6 @@ const onScrollToLower = async () => {
   })
   const newSubTypes = response.result.subTypes[activeIndex.value]
   currentSubTypes.goodsItems.items.push(...newSubTypes.goodsItems.items)
-  console.log(newSubTypes)
 }
 onLoad(() => {
   getHotRecommendData()
