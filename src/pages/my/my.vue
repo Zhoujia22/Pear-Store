@@ -25,7 +25,7 @@ const scrollByBottom = () => {
     <view class="profile" :style="{ paddingTop: safeAreaInsets!.top + 'px' }">
       <view class="overview" v-if="memberStore.profile">
         <navigator url="/pagesMember/profile/profile" hover-class="none">
-          <image class="avatar" :src="memberStore.profile.avatar"></image>
+          <image class="avatar" :src="memberStore.profile.avatar" mode="aspectFill"></image>
         </navigator>
         <view class="meta">
           <view class="nickname">
@@ -40,8 +40,10 @@ const scrollByBottom = () => {
         <navigator url="/pages/login/login" hover-class="none">
           <image
             class="avatar gray"
+            mode="aspectFill"
             src="http://yjy-xiaotuxian-dev.oss-cn-beijing.aliyuncs.com/picture/2021-04-06/db628d42-88a7-46e7-abb8-659448c33081.png"
-          ></image>
+          >
+          </image>
         </navigator>
         <view class="meta">
           <navigator url="/pages/login/login" hover-class="none" class="nickname">

@@ -19,7 +19,7 @@ const onLogout = () => {
 <template>
   <view class="viewport">
     <view class="list" v-if="memberStore.profile">
-      <navigator url="./address/address" hover-class="none" class="item arrow">
+      <navigator url="/address/address" hover-class="none" class="item arrow">
         我的收货地址
       </navigator>
     </view>
