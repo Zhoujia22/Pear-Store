@@ -1,18 +1,17 @@
-import { http } from "@/utils/http"
-
+import { http } from '@/utils/http'
 
 export type LoginParams = {
-  code: string,
-  encryptedData: string,
+  code: string
+  encryptedData: string
   iv: string
 }
 
 export type LoginResult = {
-  nid: string,
-  mobile: string,
-  token: string,
-  nickname: string,
-  avatar: string,
+  nid: string
+  mobile: string
+  token: string
+  nickname: string
+  avatar: string
   account: string
 }
 
@@ -23,7 +22,6 @@ export const postLoginWxMinAPI = (data: LoginParams) => {
     data,
   })
 }
-
 
 export const postLoginWxMinSimpleAPI = (phoneNumber: string) => {
   return http<LoginResult>({

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Guess from '@/components/Guess.vue'
 import { useMemberStore } from '@/stores'
+import { ref } from 'vue'
 
 const orderTypes = [
   { type: 1, text: '待付款', icon: 'icon-currency' },
@@ -11,10 +12,16 @@ const orderTypes = [
 
 const { safeAreaInsets } = uni.getSystemInfoSync()
 const memberStore = useMemberStore()
+
+const guessRef = ref<InstanceType<typeof Guess>>()
+
+const scrollByBottom = () => {
+  guessRef.value?.getMore()
+}
 </script>
 
 <template>
-  <scroll-view class="viewport" scroll-y>
+  <scroll-view class="viewport" scroll-y @scrolltolower="scrollByBottom">
     <view class="profile" :style="{ paddingTop: safeAreaInsets!.top + 'px' }">
       <view class="overview" v-if="memberStore.profile">
         <navigator url="/pagesMember/profile/profile" hover-class="none">
@@ -71,22 +78,15 @@ const memberStore = useMemberStore()
       </view>
     </view>
     <view class="guess">
-      <Guess />
+      <Guess ref="guessRef" />
     </view>
   </scroll-view>
 </template>
 
 <style lang="scss" scoped>
-page {
-  height: 100%;
-  overflow: hidden;
-  background-color: #f7f7f8;
-}
-
 .viewport {
-  height: 100%;
+  height: 100vh;
   background-color: #c03e46;
-  border-top-right-radius: 160rpx;
 }
 
 /* 用户信息 */
@@ -153,7 +153,7 @@ page {
     position: absolute;
     bottom: 0;
     right: 40rpx;
-    font-size: 30rpx;
+    font-size: 24rpx;
     color: #fff;
   }
 }
