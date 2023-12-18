@@ -1,4 +1,4 @@
-import { http } from "@/utils/http"
+import { http } from '@/utils/http'
 
 export type BaseProfile = {
   id: number
@@ -6,7 +6,6 @@ export type BaseProfile = {
   account: string
   nickname?: string
 }
-
 
 export type LoginResult = BaseProfile & {
   mobile: string
@@ -22,9 +21,27 @@ export type ProfileDetail = BaseProfile & {
 
 export type Gender = '女' | '男'
 
+export type ProfileParams = Pick<
+  ProfileDetail,
+  'nickname' | 'gender' | 'birthday' | 'profession'
+> & {
+  provinceCode?: string
+  cityCode?: string
+
+  countyCode?: string
+}
+
 export const getMemberProfileAPI = () => {
   return http<ProfileDetail>({
     method: 'GET',
-    url: '/member/profile'
+    url: '/member/profile',
+  })
+}
+
+export const putMemberProfileAPI = (data: ProfileParams) => {
+  return http({
+    method: 'PUT',
+    url: '/member/profile',
+    data,
   })
 }
