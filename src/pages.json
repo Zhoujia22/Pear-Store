@@ -95,34 +95,43 @@
   },
   "subPackages": [
     {
-      "root": "pagesMember/settings",
+      "root": "pagesMember",
       "pages": [
         {
-          "path": "settings",
+          "path": "settings/settings",
           "style": {
             "navigationBarTitleText": "设置"
           }
-        }
-      ]
-    },
-    {
-      "root": "pagesMember/profile",
-      "pages": [
+        },
         {
-          "path": "profile",
+          "path": "profile/profile",
           "style": {
             "navigationStyle": "custom",
+            "navigationBarTextStyle": "white",
             "navigationBarTitleText": "个人信息"
+          }
+        },
+        {
+          "path": "address/address",
+          "style": {
+            "navigationBarTitleText": "地址管理"
+          }
+        },
+        {
+          "path": "address-form/address-form",
+          "style": {
+            "navigationBarTitleText": ""
           }
         }
       ]
     }
   ],
+  // 分包预下载规则
   "preloadRule": {
     "pages/my/my": {
       "network": "all",
       "packages": [
-        "pagesMember/settings"
+        "pagesMember"
       ]
     }
   }
