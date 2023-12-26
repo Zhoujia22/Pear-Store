@@ -1,11 +1,20 @@
 <script setup lang="ts">
-import { getMemberProfileAPI, putMemberProfileAPI, type ProfileDetail } from '@/services/profile'
+import {
+  getMemberProfileAPI,
+  putMemberProfileAPI,
+  type ProfileDetail,
+  type Gender,
+} from '@/services/profile'
 import { ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
+import { useMemberStore } from '@/stores'
 
 const { safeAreaInsets } = uni.getSystemInfoSync()
 let changeAvatarSwitch = false
 const profile = ref({} as ProfileDetail)
+
+const memberStore = useMemberStore()
+
 const getMemberProfileData = async () => {
   const response = await getMemberProfileAPI()
   profile.value = response.result
@@ -30,7 +39,9 @@ const onUploadAvatar = () => {
     filePath: profile.value.avatar,
     success: (response) => {
       if (response.statusCode === 200) {
-        profile.value.avatar === JSON.parse(response.data).result.avatar
+        const avatar = JSON.parse(response.data).result.avatar
+        profile.value.avatar = avatar
+        memberStore.profile!.avatar = avatar
       } else {
         uni.showToast({ icon: 'error', title: '出现错误' })
       }
@@ -39,14 +50,36 @@ const onUploadAvatar = () => {
   })
 }
 
+const onGenderChange: UniHelper.RadioGroupOnChange = (e) => {
+  profile.value.gender = e.detail.value as Gender
+}
+const onBirthdayChange: UniHelper.DatePickerOnChange = (e) => {
+  profile.value.birthday = e.detail.value
+}
+let fullLocationCode: [string, string, string] = ['', '', '']
+const onFullLocationChange: UniHelper.RegionPickerOnChange = (e) => {
+  profile.value.fullLocation = e.detail.value.join('')
+  fullLocationCode = e.detail.code!
+}
+
 const onSubmit = async () => {
   if (changeAvatarSwitch) {
     onUploadAvatar()
   }
-  await putMemberProfileAPI({
-    nickname: profile.value?.nickname,
+  const { nickname, gender, birthday } = profile.value
+  const response = await putMemberProfileAPI({
+    nickname,
+    gender,
+    birthday,
+    provinceCode: fullLocationCode[0],
+    cityCode: fullLocationCode[1],
+    countyCode: fullLocationCode[2],
   })
+  memberStore.profile!.nickname = response.result.nickname || '🦄'
   uni.showToast({ icon: 'success', title: '保存成功' })
+  setTimeout(() => {
+    uni.navigateBack()
+  }, 400)
 }
 
 onLoad(() => {
@@ -77,7 +110,7 @@ onLoad(() => {
         </view>
         <view class="form-item">
           <text class="label">性别</text>
-          <radio-group>
+          <radio-group @change="onGenderChange">
             <label class="radio">
               <radio value="男" color="#333" :checked="profile?.gender === '男'" />
               男
@@ -89,13 +122,14 @@ onLoad(() => {
           </radio-group>
         </view>
         <view class="form-item">
-          <text class="label">出生日期</text>
+          <text class="label">出生</text>
           <picker
             class="picker"
             mode="date"
             :value="profile?.birthday"
             start="1900-01-01"
             :end="new Date()"
+            @change="onBirthdayChange"
           >
             <view v-if="false">{{ profile?.birthday }}</view>
             <view class="placeholder" v-else>请选择日期</view>
@@ -103,7 +137,12 @@ onLoad(() => {
         </view>
         <view class="form-item">
           <text class="label">城市</text>
-          <picker class="picker" :value="profile?.fullLocation?.split(' ')" mode="region">
+          <picker
+            class="picker"
+            :value="profile?.fullLocation?.split(' ')"
+            mode="region"
+            @change="onFullLocationChange"
+          >
             <view v-if="profile?.fullLocation">{{ profile.fullLocation }}</view>
             <view class="placeholder" v-else>请选择城市</view>
           </picker>
