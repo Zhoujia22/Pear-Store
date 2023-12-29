@@ -10,10 +10,22 @@ export type AddressParams = {
   isDefault: number
 }
 
+export type AddressItem = AddressParams & {
+  id: string
+  fullLocation: string
+}
+
 export const postMemberAddressAPI = (data: AddressParams) => {
   return http({
     method: 'POST',
     url: '/member/address',
     data,
+  })
+}
+
+export const getMemberAddressAPI = () => {
+  return http<AddressItem[]>({
+    method: 'GET',
+    url: '/member/address',
   })
 }

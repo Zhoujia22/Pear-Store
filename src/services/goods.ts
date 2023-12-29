@@ -1,5 +1,6 @@
 import type { GoodsItem } from '@/types/global'
 import { http } from '@/utils/http'
+import type { AddressItem } from './address'
 
 export type GoodsResult = {
   id: string
@@ -13,7 +14,7 @@ export type GoodsResult = {
   similarProducts: GoodsItem[]
   skus: SkuItem[]
   specs: SpecItem[]
-  userAddresses: UserAddressItem[]
+  userAddresses: AddressItem[]
 }
 
 export type Details = {
@@ -50,16 +51,6 @@ export type SpecValueItem = {
   desc: string
   name: string
   picture: string
-}
-
-export type UserAddressItem = {
-  address: string
-  cityCode: string
-  countyCode: string
-  fullLocation: string
-  id: string
-  isDefault: number
-  provinceCode: string
 }
 
 export const getGoodsByIdAPI = (id: string) => {

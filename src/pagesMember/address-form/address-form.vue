@@ -76,6 +76,7 @@ const onSubmit = async () => {
     </form>
   </view>
   <button class="button" @tap="onSubmit">保存并使用</button>
+  {{ form }}
 </template>
 <style lang="scss" scoped>
 page {
