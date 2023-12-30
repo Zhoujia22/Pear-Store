@@ -4,6 +4,7 @@ import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 import AddressPanel from '@/pages/goods/components/AddressPanel.vue'
 import ServicePanel from './components/ServicePanel.vue'
+import type { SkuPopupLocaldata } from '@/components/vk-data-goods-sku-popup/vk-data-goods-sku-popup'
 
 type popopFollow = 'top' | 'center' | 'bottom' | 'left' | 'right' | 'message' | 'dialog' | 'share'
 
@@ -12,10 +13,36 @@ const { safeAreaInsets } = uni.getSystemInfoSync()
 const query = defineProps<{
   id: string
 }>()
+
+const localdata = ref({} as SkuPopupLocaldata)
+const isShowSku = ref(false)
 const goods = ref<GoodsResult>()
 const getGoodsByData = async () => {
   const response = await getGoodsByIdAPI(query.id)
   goods.value = response.result
+  console.log(response)
+  localdata.value = {
+    _id: response.result.id,
+    name: response.result.name,
+    goods_thumb: response.result.mainPictures[0],
+    spec_list: response.result.specs.map((item) => {
+      return {
+        name: item.name,
+        list: item.values,
+      }
+    }),
+    sku_list: response.result.skus.map((item) => {
+      return {
+        _id: item.id,
+        goods_id: response.result.id,
+        goods_name: response.result.name,
+        image: item.picture,
+        price: item.price * 100,
+        stock: item.inventory,
+        sku_name_arr: item.specs.map((v) => v.valueName),
+      }
+    }),
+  }
 }
 const currentIndex = ref(0)
 const onChange: UniHelper.SwiperOnChange = (e) => {
@@ -36,6 +63,7 @@ const openPopup = (name: typeof popupName.value) => {
   popupName.value = name
   popup.value?.open('bottom')
 }
+
 onLoad(() => {
   getGoodsByData()
 })
@@ -43,6 +71,7 @@ onLoad(() => {
 
 <template>
   <view class="wrapper">
+    <vk-data-goods-sku-popup v-model="isShowSku" :localdata="localdata"></vk-data-goods-sku-popup>
     <scroll-view scroll-y class="viewport">
       <view class="goods">
         <view class="preview">
@@ -67,7 +96,7 @@ onLoad(() => {
         </view>
 
         <view class="action">
-          <view class="item arrow">
+          <view class="item arrow" @tap="isShowSku = true">
             <text class="label">选择</text>
             <text class="text ellipsis"> 囤货4条装（樱花粉+薄荷绿+麻米+雾蓝色） </text>
           </view>
