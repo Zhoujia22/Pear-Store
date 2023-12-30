@@ -91,7 +91,12 @@ const onSubmit = async () => {
       </uni-forms-item>
       <uni-forms-item name="contact" class="form-item">
         <text class="label">手机号码</text>
-        <input class="input" placeholder="请填写收货人手机号码" v-model="form.contact" />
+        <input
+          class="input"
+          placeholder="请填写收货人手机号码"
+          v-model="form.contact"
+          :maxlength="11"
+        />
       </uni-forms-item>
       <uni-forms-item name="fullLocation" class="form-item">
         <text class="label">所在地区</text>

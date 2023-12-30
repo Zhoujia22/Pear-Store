@@ -30,7 +30,6 @@ export const getMemberAddressAPI = () => {
   })
 }
 
-
 export const getMemberAddressByIdAPI = (id: string) => {
   return http<AddressItem>({
     method: 'GET',
@@ -43,5 +42,12 @@ export const putMemberAddressByIdAPI = (id: string, data: AddressParams) => {
     method: 'PUT',
     url: `/member/address/${id}`,
     data,
+  })
+}
+
+export const deleteMemberAddressByIdAPI = (id: string) => {
+  return http({
+    method: 'DELETE',
+    url: `/member/address/${id}`,
   })
 }

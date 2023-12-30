@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { getMemberAddressAPI, type AddressItem } from '@/services/address'
+import {
+  getMemberAddressAPI,
+  type AddressItem,
+  deleteMemberAddressByIdAPI,
+} from '@/services/address'
 import { onShow } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 
@@ -10,6 +14,18 @@ const getMemberAddressData = async () => {
   addressList.value = response.result
 }
 
+const onDeleteAddress = (id: string) => {
+  uni.showModal({
+    content: '是否要删除地址?',
+    success: async (response) => {
+      if (response.confirm) {
+        await deleteMemberAddressByIdAPI(id)
+        getMemberAddressData()
+      }
+    },
+  })
+}
+
 onShow(() => {
   getMemberAddressData()
 })
@@ -18,9 +34,9 @@ onShow(() => {
 <template>
   <view class="viewport">
     <scroll-view class="scroll-view" scroll-y>
-      <view v-if="true" class="address">
-        <view class="address-list">
-          <view class="item" v-for="item in addressList" :key="item.id">
+      <view v-if="addressList.length" class="address">
+        <uni-swipe-action class="address-list">
+          <uni-swipe-action-item class="item" v-for="item in addressList" :key="item.id">
             <view class="item-content">
               <view class="user">
                 {{ item.receiver }}
@@ -36,8 +52,11 @@ onShow(() => {
                 修改
               </navigator>
             </view>
-          </view>
-        </view>
+            <template #right>
+              <button @tap="onDeleteAddress(item.id)" class="delete-button">删除</button>
+            </template>
+          </uni-swipe-action-item>
+        </uni-swipe-action>
       </view>
       <view v-else class="blank">暂无收货地址</view>
     </scroll-view>
@@ -67,7 +86,7 @@ onShow(() => {
   background: #fff;
   .item-content {
     line-height: 1;
-    padding: 40rpx 10rpx 38rpx;
+    padding: 40rpx 0rpx 38rpx;
     border-bottom: 1rpx solid #ddd;
     position: relative;
     .edit {
@@ -106,20 +125,18 @@ onShow(() => {
     font-size: 24rpx;
     color: #333;
   }
-  .item-right {
+
+  .delete-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 120rpx;
     height: 100%;
-    .delete-button {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 50px;
-      height: 100%;
-      font-size: 28rpx;
-      color: #fff;
-      border-radius: 0;
-      padding: 0;
-      background-color: #cf4444;
-    }
+    font-size: 28rpx;
+    color: #fff;
+    border-radius: 0;
+    padding: 0;
+    background-color: #cf4444;
   }
 }
 .blank {
