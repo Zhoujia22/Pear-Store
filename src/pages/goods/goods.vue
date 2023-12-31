@@ -64,6 +64,19 @@ const openPopup = (name: typeof popupName.value) => {
   popup.value?.open('bottom')
 }
 
+enum SkuMode {
+  Both = 1,
+  Cart = 2,
+  Buy = 3,
+}
+
+const mode = ref<SkuMode>(SkuMode.Cart)
+
+const openSkuPopup = (value: SkuMode) => {
+  isShowSku.value = true
+  mode.value = value
+}
+
 onLoad(() => {
   getGoodsByData()
 })
@@ -71,7 +84,13 @@ onLoad(() => {
 
 <template>
   <view class="wrapper">
-    <vk-data-goods-sku-popup v-model="isShowSku" :localdata="localdata"></vk-data-goods-sku-popup>
+    <vk-data-goods-sku-popup
+      v-model="isShowSku"
+      :localdata="localdata"
+      :mode="mode"
+      add-cart-background-color="#FFA868"
+      buy-now-background-color="#f34c54"
+    />
     <scroll-view scroll-y class="viewport">
       <view class="goods">
         <view class="preview">
@@ -96,9 +115,9 @@ onLoad(() => {
         </view>
 
         <view class="action">
-          <view class="item arrow" @tap="isShowSku = true">
+          <view class="item arrow" @tap="openSkuPopup(SkuMode.Both)">
             <text class="label">选择</text>
-            <text class="text ellipsis"> 囤货4条装（樱花粉+薄荷绿+麻米+雾蓝色） </text>
+            <text class="text ellipsis">请选择商品规格</text>
           </view>
           <view class="item arrow" @tap="openPopup('address')">
             <text class="label">送至</text>
@@ -156,8 +175,8 @@ onLoad(() => {
         <navigator class="icons-button"><text class="icon-cart"></text>购物车</navigator>
       </view>
       <view class="buttons">
-        <view class="addcart"> 加入购物车 </view>
-        <view class="payment"> 立即购买 </view>
+        <view class="addcart" @tap="openSkuPopup(SkuMode.Cart)"> 加入购物车 </view>
+        <view class="payment" @tap="openSkuPopup(SkuMode.Buy)"> 立即购买 </view>
       </view>
     </view>
     <uni-popup ref="popup" background-color="#fff">
