@@ -4,7 +4,13 @@ import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 import AddressPanel from '@/pages/goods/components/AddressPanel.vue'
 import ServicePanel from './components/ServicePanel.vue'
-import type { SkuPopupLocaldata } from '@/components/vk-data-goods-sku-popup/vk-data-goods-sku-popup'
+import type {
+  SkuPopupEvent,
+  SkuPopupInstance,
+  SkuPopupLocaldata,
+} from '@/components/vk-data-goods-sku-popup/vk-data-goods-sku-popup'
+import { computed } from 'vue'
+import { postMemberCartAPI } from '@/services/cart'
 
 type popopFollow = 'top' | 'center' | 'bottom' | 'left' | 'right' | 'message' | 'dialog' | 'share'
 
@@ -77,6 +83,17 @@ const openSkuPopup = (value: SkuMode) => {
   mode.value = value
 }
 
+const skuPopupRef = ref<SkuPopupInstance>()
+
+const selectArrText = computed(
+  () => skuPopupRef.value?.selectArr?.join(' ').trim() || '请选择商品规格',
+)
+
+const onAddCart = async (e: SkuPopupEvent) => {
+  await postMemberCartAPI({ skuId: e._id, count: e.buy_num })
+  uni.showToast({ title: '添加成功' })
+  isShowSku.value = false
+}
 onLoad(() => {
   getGoodsByData()
 })
@@ -85,11 +102,18 @@ onLoad(() => {
 <template>
   <view class="wrapper">
     <vk-data-goods-sku-popup
+      ref="skuPopupRef"
       v-model="isShowSku"
       :localdata="localdata"
       :mode="mode"
       add-cart-background-color="#FFA868"
       buy-now-background-color="#f34c54"
+      :actived-style="{
+        color: '#c03e46',
+        borderColor: '#b03040',
+        backgroundColor: '#c03e4613',
+      }"
+      @add-cart="onAddCart"
     />
     <scroll-view scroll-y class="viewport">
       <view class="goods">
@@ -117,7 +141,7 @@ onLoad(() => {
         <view class="action">
           <view class="item arrow" @tap="openSkuPopup(SkuMode.Both)">
             <text class="label">选择</text>
-            <text class="text ellipsis">请选择商品规格</text>
+            <text class="text ellipsis">{{ selectArrText }}</text>
           </view>
           <view class="item arrow" @tap="openPopup('address')">
             <text class="label">送至</text>
