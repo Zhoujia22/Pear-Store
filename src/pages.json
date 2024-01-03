@@ -30,6 +30,12 @@
       }
     },
     {
+      "path": "pages/cart/cartPage",
+      "style": {
+        "navigationBarTitleText": "购物车"
+      }
+    },
+    {
       "path": "pages/category/category",
       "style": {
         "navigationBarTitleText": "分类"
