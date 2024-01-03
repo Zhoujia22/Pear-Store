@@ -196,7 +196,9 @@ onLoad(() => {
         <button class="icons-button" open-type="contact">
           <text class="icon-handset"></text>客服
         </button>
-        <navigator class="icons-button"><text class="icon-cart"></text>购物车</navigator>
+        <navigator class="icons-button" url="/pages/cart/cart" open-type="switchTab">
+          <text class="icon-cart"></text>购物车</navigator
+        >
       </view>
       <view class="buttons">
         <view class="addcart" @tap="openSkuPopup(SkuMode.Cart)"> 加入购物车 </view>
@@ -374,7 +376,7 @@ onLoad(() => {
           float: left;
         }
         .image {
-          height: 260rpx;
+          height: 304rpx;
         }
         .name {
           height: 80rpx;
