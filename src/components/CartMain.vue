@@ -62,7 +62,7 @@ const gotoPayment = () => {
       title: '请选择商品',
     })
   } else {
-    uni.showToast({ title: '请等待...' })
+    uni.navigateTo({ url: '/pagesOrder/create/create' })
   }
 }
 
