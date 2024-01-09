@@ -24,9 +24,46 @@ export type OrderPreGoods = {
   totalPrice: string
 }
 
+export type OrderCreateParams = {
+  addressId: string
+  deliveryTimeType: number
+  buyerMessage: string
+  goods: {
+    count: number
+    skuId: string
+  }[]
+  payChannel: 1 | 2
+  payType: 1 | 2
+}
+
+export type OrderCreateResult = {
+  id: string
+}
+
 export const getMemberOrderPreAPI = () => {
   return http<OrderPreResult>({
     method: 'GET',
     url: '/member/order/pre',
+  })
+}
+
+export const getMemberOrderPreNowAPI = (data: {
+  skuId: string
+  count: string
+  addressId?: string
+}) => {
+  return http<OrderPreResult>({
+    method: 'GET',
+    url: '/member/order/pre/now',
+    data,
+  })
+}
+
+
+export const postMemberOrderAPI = (data: OrderCreateParams) => {
+  return http<OrderCreateResult>({
+    method: 'POST',
+    url: '/member/order',
+    data
   })
 }

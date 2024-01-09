@@ -94,6 +94,10 @@ const onAddCart = async (e: SkuPopupEvent) => {
   uni.showToast({ title: '添加成功' })
   isShowSku.value = false
 }
+
+const onBuyNow = (e: SkuPopupEvent) => {
+  uni.navigateTo({ url: `/pagesOrder/create/create?skuId=${e._id}&count=${e.buy_num}` })
+}
 onLoad(() => {
   getGoodsByData()
 })
@@ -114,6 +118,7 @@ onLoad(() => {
         backgroundColor: '#c03e4613',
       }"
       @add-cart="onAddCart"
+      @buy-now="onBuyNow"
     />
     <scroll-view scroll-y class="viewport">
       <view class="goods">
